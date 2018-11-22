@@ -71,8 +71,21 @@
 			<h6>My orders history</h6>
 		</div>				
 	</div>
-	<button id="startBot" onclick="startBot" class="btn btn-default col-2 offset-5 row">Start another ticker</button>
-	
+	<hr>
+	<form class="col-2 offset-5 row">
+		<div class="form-group">
+		<label for="newTicker" style="color:white">Select another ticker</label>
+		<select class="form-control" id="newTicker">
+			<option value='MUE/BTC' selected>MUE</option>
+			<option value="ABY/BTC">ABY</option>
+			<option value="ADT/BTC">ADT</option>
+			<option value="ADA/BTC">ADA</option>
+		</select>
+		</div>
+		<button id="startNewBot" onclick="startBot" class="btn btn-default">Start another ticker</button>
+	</form>
+	<hr>
+	<button id="backtest" onclick="startBacktest" class="btn btn-default col-2 offset-5 row">Start backtest</button>
 </div>
 <!--script src="./js/main.js"></script-->
 </body>
