@@ -102,7 +102,7 @@ const exchange = new ccxt.bittrex({
         }));
     */
     console.log(orderbook); //bids:[price,size.toFixed(3), asks:[price,size.toFixed(3)]
-    process.exit();
+    //    process.exit();
 
     //};
 })()

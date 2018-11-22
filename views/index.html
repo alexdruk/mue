@@ -35,19 +35,40 @@
 		</div>	
 		<div>
 			<h6>Order Book</h6>
-			<hr>
+			<div>
+				<table id="orderbook_table" class="table table-hover table-dark text-center">
+					<thead>
+						<tr>
+							<th scope="col">Total</th>
+							<th scope="col">Size</th>
+							<th scope="col">Bid</th>
+							<th scope="col"></th>
+							<th scope="col">Ask</th>
+							<th scope="col">Size</th>
+							<th scope="col">Total</th>
+						</tr>
+					</thead>
+					<tbody id="orderbook_body">
+							<tr>
+									<td class="text-center">12</td>
+									<td>14</td>
+									<td class="green_td">0.004</td>
+									<td></td>
+									<td class="red_td">0.005</td>
+									<td>23</td>
+									<td>4534</td>
+							</tr>
+					</tbody>		
+				</table>
+			</div>
 		</div>	
 		<div>
 			<h6>Market History</h6>
-			<hr>
-		</div>	
 		<div>
 			<h6>My open orders</h6>
-			<hr>
 		</div>	
 		<div>
 			<h6>My orders history</h6>
-			<hr>
 		</div>				
 	</div>
 	<button id="startBot" onclick="startBot" class="btn btn-default col-2 offset-5 row">Start another ticker</button>

@@ -10,10 +10,13 @@ body{
 }
 td {
   padding: 5px;
-  text-align: left;
-  border: solid;
-  border-width: 1px;
-  border-color: #e3f0ff;
+  text-align: center;
+}
+.green_td {
+  color: green;
+}
+.red_td {
+  color: red;
 }
 #tradingview {
   margin-top: 25px;
