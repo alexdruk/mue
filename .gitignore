@@ -1,5 +1,9 @@
 #credentials
 api_keys.js
+
+#.vscode
+.vscode/
+
 # Logs
 logs
 *.log
