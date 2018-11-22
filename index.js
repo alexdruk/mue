@@ -23,8 +23,8 @@ const exchange = new ccxt.bittrex({
 //-----------------------------------------------------------------------------
 
 //module.exports.main = async function main(ws, symbol) {
-(async function main() {
-    console.log('Running');
+async function main() {
+    console.log('Running', new Date());
     let storage = {
         inibalance: 0,
         inibalance_as_string: '',
@@ -110,4 +110,10 @@ const exchange = new ccxt.bittrex({
     //    process.exit();
 
     //};
-})()
+};
+main();
+let tm = setInterval(main, 30 * 1000); // every ~30 sec
+function stop() {
+    tm.unref;
+    process.exit(0);
+}
