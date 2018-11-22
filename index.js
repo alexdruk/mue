@@ -60,7 +60,12 @@ const exchange = new ccxt.bittrex({
     }
     let balanceinfo = await exchange_funct.get_balance(exchange);
     if (balanceinfo) {
-        // send to page balanceinfo
+        /*    ws.send(JSON.stringify({
+                "exec": "balance",
+                "data": balanceinfo
+            }));
+        */
+        console.log(balanceinfo);
         let curr_availabe, assets_available = 0;
         for (const key in balanceinfo) {
             if (balanceinfo.hasOwnProperty(key)) {
