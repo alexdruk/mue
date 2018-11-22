@@ -1,0 +1,25 @@
+{
+  "name": "mue",
+  "version": "1.0.0",
+  "description": "bitterx bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Cryptelligent",
+  "license": "ISC",
+  "dependencies": {
+    "as-table": "^1.0.36",
+    "asciichart": "^1.5.7",
+    "body-parser": "^1.18.3",
+    "ccxt": "^1.17.511",
+    "cookie-parser": "^1.4.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "moment": "^2.22.2",
+    "ololog": "^1.1.113",
+    "opn": "^5.4.0",
+    "path": "^0.12.7",
+    "ws": "^6.1.2"
+  }
+}

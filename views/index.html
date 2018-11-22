@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>Mue bot</title>
+    <script src="./js/jquery-3.2.1.min.js"></script>
+    <script src="./js/popper.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <!--script src="./js/vue.js"></script-->
+    <link rel="stylesheet" href="./css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="./css/extra.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"/>
+    <link rel="stylesheet" href="./css/style.css"/>
+</head>
+<body>
+<div class="container">
+</div>
+<div class="container" style="margin: 0px auto;">
+    <div id="main">
+        <h1>My new bot</h1>
+		
+        <!--button id="stopProcess" v-on:click="stopEverything" class="d-none btn btn-default col-2 offset-2 row">Stop the process</button-->
+		<!-- TradingView Widget BEGIN  see https://www.tradingview.com/widget/advanced-chart/ -->
+        <div id="logs" class="d-none">
+            <p class="col-10 info d-none row">
+            </p>
+            <p class="col-10 errors row d-none">
+            </p>
+        </div>
+		<div id="tradingview">
+			<% include tradingview.ejs %>
+			<hr>
+		</div>	
+		<div>
+			<h6>Order Book</h6>
+			<hr>
+		</div>	
+		<div>
+			<h6>Market History</h6>
+			<hr>
+		</div>	
+		<div>
+			<h6>My open orders</h6>
+			<hr>
+		</div>	
+		<div>
+			<h6>My orders history</h6>
+			<hr>
+		</div>				
+	</div>
+	<button id="startBot" onclick="startBot" class="btn btn-default col-2 offset-5 row">Start another ticker</button>
+	
+</div>
+<!--script src="./js/main.js"></script-->
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
