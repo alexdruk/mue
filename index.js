@@ -21,10 +21,45 @@ const exchange = new ccxt.bittrex({
 });
 
 //-----------------------------------------------------------------------------
+let symbol = 'MUE/BTC'; // default
+let cycle;
+//getData();
+//startCycle();
 
-//module.exports.main = async function main(ws, symbol) {
-async function main() {
+function setTicker(ws, ticker) {
+    symbol = ticker;
+    getData(ws);
+}
+
+function stopCycle() {
+    if (cycle) {
+        clearInterval(cycle);
+        cycle = null;
+    }
+};
+
+function startCycle(ws) { ///start as soon as user open a browser
+    getData(ws);
+    cycle = setInterval(getData, 30 * 1000, ws); // every ~30 sec
+    sendData(ws, {
+        "info": "cycle started"
+    });
+}
+
+function sendData(ws, data) {
+    const message_str = JSON.stringify(data);
+    if (ws) {
+        ws.send(message_str);
+    } else {
+        console.log(message_str);
+    }
+}
+async function getData(ws) {
     console.log('Running', new Date());
+    sendData(ws, {
+        "info": "getData started"
+    });
+
     let storage = {
         inibalance: 0,
         inibalance_as_string: '',
@@ -45,13 +80,6 @@ async function main() {
                 }));
         */
     });
-    const args = process.argv;
-    //console.log(args, args.length);
-    if (args.length < 3) {
-        console.log('Wrong number of arguments! Exiting...');
-        process.exit(1);
-    }
-    const symbol = args[2].toString();
     let [assets_name, currency_name] = symbol.split('/');
     let last_price = await exchange_funct.get_last_price(exchange, symbol);
     //    last_price = parseFloat(last_price);
@@ -101,19 +129,18 @@ async function main() {
     }
     const orderbook = await exchange_funct.get_orderBook(exchange, symbol);
 
-    /*    ws.send(JSON.stringify({
-            "exec": "orderbook",
-            "data": orderbook
-        }));
-    */
+    sendData(ws, {
+        "exec": "orderbook",
+        "data": orderbook
+    });
+
     console.log(orderbook); //bids:[price,size.toFixed(3), asks:[price,size.toFixed(3)]
     //    process.exit();
 
     //};
 };
-main();
-let tm = setInterval(main, 30 * 1000); // every ~30 sec
-function stop() {
-    tm.unref;
-    process.exit(0);
+module.exports = {
+    setTicker: setTicker,
+    startCycle: startCycle,
+    stopCycle: stopCycle
 }
