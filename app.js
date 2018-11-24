@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const WebSocket = require('ws');
 const opn = require("opn");
-require('ansicolor').nice;
 
 const PORT = 8080;
 const WSS_PORT = 8081;
