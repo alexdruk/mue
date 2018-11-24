@@ -8,12 +8,15 @@ body{
 .centerTable {
  margin: 0px auto;
 }
+.table td, .table th {
+  padding: .3rem;
+}
 td {
-  padding: 5px;
   text-align: center;
+  font-size: 0.8em;
 }
 .green_td {
-  color: green;
+  color: rgb(11, 214, 11);
 }
 .red_td {
   color: red;
