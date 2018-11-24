@@ -11,6 +11,7 @@ socket.addEventListener('open', function (event) {
 // Listen for messages
 socket.addEventListener('message', function (event) {
     console.log('Message from server ', event.data);
+    $('#error_body').collapse('hide'); //?????
     let parsedData = JSON.parse(event.data);
     switch (parsedData.exec) {
         case 'orderbook':
@@ -30,6 +31,10 @@ socket.addEventListener('message', function (event) {
             let info_body = document.getElementById('info_body');
             info_body.innerText = parsedData.data;
             break;
+        case "marketHistory":
+            let mhist = document.getElementById('mhist_body');
+            mhist.innerHTML = builMarketHistory(parsedData.data);
+            break;
 
     }
 
@@ -37,6 +42,27 @@ socket.addEventListener('message', function (event) {
 socket.addEventListener('close', function (event) {
     console.log('Socket closed');
 });
+
+function builMarketHistory(data) {
+    let html = '';
+    let side = ''
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].side == 'buy') {
+            side = '<td class = "green_td">' + data[i].side + '</td>'
+        } else {
+            side = '<td class = "red_td">' + data[i].side + '</td>'
+        }
+        html += '<tr>' +
+            '<td>' + data[i].time + '</td>' +
+            '<td>' + data[i].type + '</td>' +
+            side +
+            '<td>' + data[i].price + '</td>' +
+            '<td>' + data[i].amount + '</td>' +
+            '<td>' + data[i].cost + '</td>' +
+            '</tr>';
+    }
+    return html;
+}
 
 function buldOrderbook(data) {
     let bids = data.bids;
