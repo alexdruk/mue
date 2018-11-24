@@ -1,14 +1,8 @@
 "use strict";
 
 const ccxt = require('ccxt');
-//const ex = 'bittrex';
-//const log = require('ololog').configure({
-//    locate: false
-//});
 const creds = require('./api_keys.js');
 const exchange_funct = require('./exchange_funct.js');
-require('ansicolor').nice;
-const moment = require('moment');
 const WebSocket = require('ws');
 const exchangeId = 'bittrex';
 const exchangeClass = ccxt[exchangeId];
@@ -64,15 +58,15 @@ async function getData(ws) {
     console.log('Running', new Date());
     sendData(ws, {
         "exec": "info",
-        "data": 'Tick ' + storage.tick + '&nbsp;&nbsp;&nbsp;' + new Date()
+        "data": 'Tick ' + storage.tick + ' - ' + new Date()
     });
     /* test error
-        if (storage.tick == 2) {
-            sendData(ws, {
-                "exec": "error",
-                "data": 'error ' + new Date()
-            });
-        }
+    if (storage.tick == 2) {
+        sendData(ws, {
+            "exec": "error",
+            "data": 'error ' + new Date()
+        });
+    }
     */
     process.on('uncaughtException', e => {
         console.log(e);
@@ -128,26 +122,29 @@ async function getData(ws) {
         at: []
     };
     ins = await exchange_funct.get_ins(exchange, symbol, '1m');
-
-    if (ins) {
-        for (const key in ins.at) {
-            //            console.log(key, moment(ins.at[key]).format("DD-MM-YYYY HH:mm"), ins.open[key], ins.high[key], ins.low[key], ins.close[key], ins.volume[key])
-        }
-    }
-    const orderbook = await exchange_funct.get_orderBook(exchange, symbol);
+    // if (ins) {
+    //     for (const key in ins.at) {
+    //         console.log(key, moment(ins.at[key]).format("DD-MM-YYYY HH:mm"), ins.open[key], ins.high[key], ins.low[key], ins.close[key], ins.volume[key])
+    //     }
+    // }
+    let orderbook = await exchange_funct.get_orderBook(exchange, symbol);
     sendData(ws, {
         "exec": "orderbook",
         "data": orderbook
     });
 
-    //    console.log(orderbook); //bids:[price,size.toFixed(3), asks:[price,size.toFixed(3)]
-    //    process.exit();
-
-    //};
+    let marketHistory = await exchange_funct.getMarketHist(exchange, symbol); //symbol, since = undefined, limit = undefined, params = {}
+    // console.log('history', marketHistory);
+    sendData(ws, {
+        "exec": "marketHistory",
+        "data": marketHistory
+    });
     storage.tick++;
 };
+//getData();
 module.exports = {
     setTicker: setTicker,
     startCycle: startCycle,
-    stopCycle: stopCycle
+    stopCycle: stopCycle,
+    sendData: sendData
 }
