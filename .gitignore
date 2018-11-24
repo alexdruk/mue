@@ -4,6 +4,9 @@ api_keys.js
 #.vscode
 .vscode/
 
+#.test
+test.js
+
 # Logs
 logs
 *.log
