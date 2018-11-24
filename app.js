@@ -18,10 +18,8 @@ let wss = new WebSocket.Server({
 });
 
 wss.on("connection", (ws) => {
-    //   ws.on("open", () => {
     console.log("Opened");
     crypto.startCycle(ws);
-    //    });
 
     ws.on("message", (mesage_string) => {
         let parsedData = JSON.parse(mesage_string);
