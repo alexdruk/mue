@@ -15,17 +15,16 @@
 <div class="container" style="margin: 0px auto;">
     <div id="main">
         <h1>Mue bot</h1>
-        <div id="logs" class="d-none">
-            <p class="col-10 info d-none row">
+        <div id="logs">
+            <p class="col-10 info row" id="info_body">
             </p>
-            <p class="col-10 errors row d-none">
+            <p class="col-10 errors row collapse" id="error_body">
             </p>
         </div>
 		<div id="tradingview">
 			<!-- TradingView Widget BEGIN -->
 			<div class="tradingview-widget-container">
 					<div id="tradingview_e7b87"></div>
-					<div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/symbols/BITTREX-MUEBTC/" rel="noopener" target="_blank"><span class="blue-text">MUEBTC chart</span></a> by TradingView</div>
 					<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 					<script type="text/javascript">
 					new TradingView.widget(
@@ -65,22 +64,13 @@
 						<th scope="col">Total</th>
 						<th scope="col">Size</th>
 						<th scope="col">Bid</th>
-						<th scope="col"></th>
+						<th scope="col">|</th>
 						<th scope="col">Ask</th>
 						<th scope="col">Size</th>
 						<th scope="col">Total</th>
 					</tr>
 				</thead>
 				<tbody id="orderbook_body">
-					<tr>
-						<td>12</td>
-						<td>14</td>
-						<td class="green_td">0.004</td>
-						<td></td>
-						<td class="red_td">0.005</td>
-						<td>23</td>
-						<td>4534</td>
-					</tr>
 				</tbody>		
 			</table>
 		</div>	
@@ -104,18 +94,6 @@
 					</tr>
 				</thead>
 				<tbody id="balance_body">
-					<tr>
-						<td>BTC</td>
-						<td>0</td>
-						<td>0</td>
-						<td>0</td>
-					</tr>
-					<tr>
-						<td>MUE</td>
-						<td>5500</td>
-						<td>5500</td>
-						<td>0</td>
-					</tr>
 				</tbody>		
 			</table>
 		</div>				

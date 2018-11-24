@@ -19,10 +19,16 @@ const exchange = new ccxt.bittrex({
     'enableRateLimit': true,
     'verbose': false,
 });
+let storage = {
+    inibalance: 0,
+    inibalance_as_string: '',
+    tick: 0,
+};
 
 //-----------------------------------------------------------------------------
 let symbol = 'MUE/BTC'; // default
 let cycle;
+
 //getData();
 //startCycle();
 
@@ -40,7 +46,7 @@ function stopCycle() {
 
 function startCycle(ws) { ///start as soon as user open a browser
     getData(ws);
-    cycle = setInterval(getData, 30 * 1000, ws); // every ~30 sec
+    cycle = setInterval(getData, 30 * 1000, ws); // every ~30 sec; comment this line if you want getData to be executed only once
     sendData(ws, {
         "info": "cycle started"
     });
@@ -57,28 +63,30 @@ function sendData(ws, data) {
 async function getData(ws) {
     console.log('Running', new Date());
     sendData(ws, {
-        "info": "getData started"
+        "exec": "info",
+        "data": 'Tick ' + storage.tick + '&nbsp;&nbsp;&nbsp;' + new Date()
     });
-
-    let storage = {
-        inibalance: 0,
-        inibalance_as_string: '',
-    };
+    /* test error
+        if (storage.tick == 2) {
+            sendData(ws, {
+                "exec": "error",
+                "data": 'error ' + new Date()
+            });
+        }
+    */
     process.on('uncaughtException', e => {
         console.log(e);
-        /*        ws.send(JSON.stringify({
-                    "exec": "error",
-                    "data": e
-                }));
-        */
+        ws.send(ws, {
+            "exec": "error",
+            "data": e
+        });
     });
     process.on('unhandledRejection', e => {
         console.log(e);
-        /*        ws.send(JSON.stringify({
-                    "exec": "error",
-                    "data": e
-                }));
-        */
+        ws.send(ws, {
+            "exec": "error",
+            "data": e
+        });
     });
     let [assets_name, currency_name] = symbol.split('/');
     let last_price = await exchange_funct.get_last_price(exchange, symbol);
@@ -88,12 +96,11 @@ async function getData(ws) {
     }
     let balanceinfo = await exchange_funct.get_balance(exchange);
     if (balanceinfo) {
-        /*    ws.send(JSON.stringify({
-                "exec": "balance",
-                "data": balanceinfo
-            }));
-        */
-        console.log(balanceinfo);
+        //    console.log(balanceinfo);
+        sendData(ws, {
+            "exec": "balance",
+            "data": balanceinfo
+        });
         let curr_availabe, assets_available = 0;
         for (const key in balanceinfo) {
             if (balanceinfo.hasOwnProperty(key)) {
@@ -128,16 +135,16 @@ async function getData(ws) {
         }
     }
     const orderbook = await exchange_funct.get_orderBook(exchange, symbol);
-
     sendData(ws, {
         "exec": "orderbook",
         "data": orderbook
     });
 
-    console.log(orderbook); //bids:[price,size.toFixed(3), asks:[price,size.toFixed(3)]
+    //    console.log(orderbook); //bids:[price,size.toFixed(3), asks:[price,size.toFixed(3)]
     //    process.exit();
 
     //};
+    storage.tick++;
 };
 module.exports = {
     setTicker: setTicker,
