@@ -9,12 +9,9 @@
   "author": "Cryptelligent",
   "license": "ISC",
   "dependencies": {
-    "as-table": "^1.0.36",
-    "asciichart": "^1.5.7",
     "ccxt": "^1.17.511",
     "express": "^4.16.4",
     "moment": "^2.22.2",
-    "ololog": "^1.1.113",
     "opn": "^5.4.0",
     "path": "^0.12.7",
     "ws": "^6.1.2"
