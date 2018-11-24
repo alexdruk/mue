@@ -76,11 +76,56 @@
 		</div>	
 		<div>
 			<h6>Market History</h6>
+			<table id="mhist" class="table table-hover table-dark text-center">
+				<thead>
+					<tr>
+						<th scope="col">Time</th>
+						<th scope="col">Order type</th>
+						<th scope="col">Buy/Sell</th>
+						<th scope="col">Price</th>
+						<th scope="col">Amount</th>
+						<th scope="col">Cost</th>
+					</tr>
+				</thead>
+				<tbody id="mhist_body">
+				</tbody>		
+			</table>
 		<div>
 			<h6>My open orders</h6>
+			<table id="openOrders" class="table table-hover table-dark text-center">
+				<thead>
+					<tr>
+						<th scope="col">Order date</th>
+						<th scope="col">Order type</th>
+						<th scope="col">Bid/Ask</th>
+						<th scope="col">Filled</th>
+						<th scope="col">Units total</th>
+						<th scope="col">Actual rate</th>
+						<th scope="col">Estimated total</th>
+					</tr>
+				</thead>
+				<tbody id="openOrders_body">
+				</tbody>		
+			</table>
 		</div>	
 		<div>
 			<h6>My orders history</h6>
+			<table id="ohist" class="table table-hover table-dark text-center">
+				<thead>
+					<tr>
+						<th scope="col">Closed date</th>
+						<th scope="col">Open date</th>
+						<th scope="col">Type</th>
+						<th scope="col">Bid/Ask</th>
+						<th scope="col">Units filled</th>
+						<th scope="col">Units total</th>
+						<th scope="col">Actual rate</th>
+						<th scope="col">Cost/Proceeds</th>
+					</tr>
+				</thead>
+				<tbody id="ohist_body">
+				</tbody>		
+			</table>
 		</div>				
 		<div>
 			<h6>My balance</h6>
