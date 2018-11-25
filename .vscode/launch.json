@@ -8,8 +8,9 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/index.js",
-            "args": [ "MUE/BTC"]
+            // "program": "${workspaceFolder}/index.js",
+            // "args": [ "MUE/BTC"]
+            "program": "${workspaceFolder}/test.js",
         }
     ]
 }
