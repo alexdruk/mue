@@ -11,7 +11,6 @@ socket.addEventListener("open", function(event) {
 // Listen for messages
 socket.addEventListener("message", function(event) {
   console.log("Message from server ", event.data);
-  $("#error_body").collapse("hide"); //?????
   let parsedData = JSON.parse(event.data);
   switch (parsedData.exec) {
     case "orderbook":
@@ -38,12 +37,55 @@ socket.addEventListener("message", function(event) {
     case "openOrders":
       let open_ord = document.getElementById("openOrders_body");
       open_ord.innerHTML = buildOpenOrders(parsedData.data);
+    case "closedOrders":
+      let closed_ord = document.getElementById("ohist_body");
+      closed_ord.innerHTML = buildClosedOrders(parsedData.data);
   }
 });
 socket.addEventListener("close", function(event) {
   console.log("Socket closed");
 });
 
+function buildClosedOrders(data) {
+  let html = "";
+  let side = "";
+  for (let i = 0; i < data.length; i++) {
+    if (data[i].side == "buy") {
+      side = '<td class = "green_td">' + data[i].side + "</td>";
+    } else {
+      side = '<td class = "red_td">' + data[i].side + "</td>";
+    }
+    html +=
+      "<tr>" +
+      "<td>" +
+      data[i].closed +
+      "</td>" +
+      "<td>" +
+      data[i].open +
+      "</td>" +
+      side +
+      "<td>" +
+      data[i].price +
+      "</td>" +
+      "<td>" +
+      data[i].filled +
+      "</td>" +
+      "<td>" +
+      data[i].amount +
+      "</td>" +
+      "<td>" +
+      data[i].price +
+      "</td>" +
+      "<td>" +
+      (
+        data[i].price * data[i].amount -
+        data[i].price * data[i].amount * 0.0025
+      ).toFixed(8) +
+      "</td>" +
+      "</tr>";
+  }
+  return html;
+}
 function buildOpenOrders(data) {
   let html = "";
   let side = "";
@@ -72,7 +114,10 @@ function buildOpenOrders(data) {
       data[i].cost +
       "</td>" +
       "<td>" +
-      (data[i].price * data[i].amount).toFixed(8) +
+      (
+        data[i].price * data[i].amount -
+        data[i].price * data[i].amount * 0.0025
+      ).toFixed(8) +
       "</td>" +
       "<td>" +
       data[i].status +

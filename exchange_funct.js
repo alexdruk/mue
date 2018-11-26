@@ -108,8 +108,8 @@ module.exports = {
     let timestamp_aday_ago = moment(new Date())
       .subtract(1, "days")
       .valueOf();
-    orders_arr = await exchange.fetchOpenOrders(symbol, timestamp_aday_ago);
     try {
+      orders_arr = await exchange.fetchOpenOrders(symbol, timestamp_aday_ago);
       for (let i = 0; i < orders_arr.length; i++) {
         let order = {
           id: "",
@@ -138,6 +138,48 @@ module.exports = {
         openOrders.push(order);
       }
       return openOrders;
+    } catch (e) {
+      this.parseError(e);
+    }
+  },
+  get_closedOrders: async function(exchange, symbol) {
+    let ClosedOrders = [];
+    let timestamp_aday_ago = moment(new Date())
+      .subtract(1, "days")
+      .valueOf();
+    try {
+      let ohist = await exchange.fetchClosedOrders(symbol, timestamp_aday_ago);
+      for (let i = 0; i < ohist.length; i++) {
+        let order = {
+          id: "",
+          open: "",
+          closed: "",
+          side: "",
+          price: "0",
+          cost: "0",
+          amount: "0",
+          filled: "0",
+          remaining: "0",
+          status: ""
+        };
+        order.id = ohist[i].id;
+        order.open =
+          moment.utc(ohist[i].info.TimeStamp).format("YYYY/MM/DD HH:mm:ss") +
+          "(UTC)";
+        order.closed =
+          moment.utc(ohist[i].info.Closed).format("YYYY/MM/DD HH:mm:ss") +
+          "(UTC)";
+        order.side = ohist[i].side;
+        order.price = ohist[i].price.toFixed(8);
+        order.cost = ohist[i].cost.toFixed(8);
+        order.amount = ohist[i].amount.toFixed(8);
+        order.filled = ohist[i].filled.toFixed(8);
+        order.remaining = ohist[i].remaining.toFixed(8);
+        order.status = ohist[i].status;
+        ClosedOrders.push(order);
+      }
+      //      console.log("ClosedOrders:", ClosedOrders);
+      return ClosedOrders;
     } catch (e) {
       this.parseError(e);
     }

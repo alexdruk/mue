@@ -154,11 +154,18 @@ async function getData(ws) {
     data: marketHistory
   });
   let openOrders = await exchange_funct.get_openOrders(exchange, symbol);
-  console.log("open orders:", openOrders);
+  //  console.log("open orders:", openOrders);
   sendData(ws, {
     exec: "openOrders",
     data: openOrders
   });
+  let closedOrders = await exchange_funct.get_closedOrders(exchange, symbol);
+  //  console.log("closed orders:", closedOrders);
+  sendData(ws, {
+    exec: "closedOrders",
+    data: closedOrders
+  });
+
   storage.tick++;
 }
 //getData();
