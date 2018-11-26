@@ -3,9 +3,11 @@ api_keys.js
 
 #.vscode
 .vscode/
+#.data
+data/
 
 #.test
-test.js
+test*
 
 # Logs
 logs
