@@ -27,30 +27,33 @@
 					<div id="tradingview_e7b87"></div>
 					<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 					<script type="text/javascript">
-					new TradingView.widget(
-					{
-					"width": 1100,
-					"height": 610,
-					"symbol": "BITTREX:MUEBTC",
-					"interval": "1",
-					"timezone": "Etc/UTC",
-					"theme": "Dark",
-					"style": "1",
-					"locale": "en",
-					"toolbar_bg": "rgba(216, 216, 216, 1)",
-					"enable_publishing": false,
-					"withdateranges": true,
-					"allow_symbol_change": true,
-					"details": true,
-					"studies": [
-					"BB@tv-basicstudies"
-					],
-					"show_popup_button": false,
-					"popup_width": "1000",
-					"popup_height": "650",
-					"container_id": "tradingview_e7b87"
+					window.onload = (function () {
+						let ticker = document.getElementById("newTicker").value;
+						new TradingView.widget(
+						{
+						"width": 1100,
+						"height": 610,
+						"symbol": "BITTREX:" + ticker,
+						"interval": "1",
+						"timezone": "Etc/UTC",
+						"theme": "Dark",
+						"style": "1",
+						"locale": "en",
+						"toolbar_bg": "rgba(216, 216, 216, 1)",
+						"enable_publishing": false,
+						"withdateranges": true,
+						"allow_symbol_change": true,
+						"details": true,
+						"studies": [
+						"BB@tv-basicstudies"
+						],
+						"show_popup_button": false,
+						"popup_width": "1000",
+						"popup_height": "650",
+						"container_id": "tradingview_e7b87"
+						});
 					});
-					</script>
+				</script>
 			</div>
 			<!-- TradingView Widget END -->
 	  	<hr>
@@ -147,14 +150,14 @@
 	<form class="col-2 offset-5 row">
 		<div class="form-group">
 		<label for="newTicker" style="color:white">Select another ticker</label>
-		<select class="form-control" id="newTicker">
-			<option value='MUE/BTC' selected>MUE</option>
-			<option value="ABY/BTC">ABY</option>
-			<option value="ADT/BTC">ADT</option>
-			<option value="ADA/BTC">ADA</option>
+		<select class="form-control" id="newTicker" onchange="sendTicker()">
+			<option value='MUEBTC'  selected>MUE/BTC</option>
+			<option value='ABYBTC'>ABY/BTC</option>
+			<option value='ADTBTC'>ADT/BTC</option>
+			<option value='ADABTC'>ADA/BTC</option>
 		</select>
 		</div>
-		<button id="startNewBot" onclick="startBot" class="btn btn-default">Start another ticker</button>
+		<!--button id="submit" type="submit"    class="btn btn-default col-2 offset-5 row">Start new tickert</button-->
 	</form>
 	<hr>
 	<button id="backtest" onclick="startBacktest" class="btn btn-default col-2 offset-5 row">Start backtest</button>
