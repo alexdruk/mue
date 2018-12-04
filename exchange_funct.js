@@ -55,8 +55,8 @@ module.exports = {
       return null;
     }
   },
-  get_orderBook: async function(exchange, symbol) {
-    let toshow = 20;
+  get_orderBook: async function(exchange, symbol, depth) {
+    let toshow = depth;
     let orderBook = {
       bids: [],
       asks: []
@@ -70,9 +70,9 @@ module.exports = {
       this.parseError(e);
     }
   },
-  getMarketHist: async function(exchange, symbol) {
+  get_MarketHist: async function(exchange, symbol, depth) {
     let ha = [];
-    let toshow = 10;
+    let toshow = depth;
     let timestamp_aday_ago = moment(new Date())
       .subtract(1, "days")
       .valueOf();
