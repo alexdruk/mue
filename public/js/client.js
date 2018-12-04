@@ -1,5 +1,5 @@
 // Create WebSocket connection.
-const socket = new WebSocket("ws://localhost:8081");
+let socket = new WebSocket("ws://localhost:8081");
 
 // Connection opened
 
@@ -45,6 +45,13 @@ socket.addEventListener("message", function(event) {
 socket.addEventListener("close", function(event) {
   console.log("Socket closed");
 });
+
+function sendTicker() {
+  let e = document.getElementById("newTicker");
+  let ticker = e.options[e.selectedIndex].text;
+  let data = { exec: "setTicker", data: ticker };
+  socket.send(JSON.stringify(data));
+}
 
 function buildClosedOrders(data) {
   let html = "";
@@ -146,7 +153,7 @@ function buildMarketHistory(data) {
       "</td>" +
       side +
       "<td>" +
-      data[i].price +
+      data[i].price.toFixed(8) +
       "</td>" +
       "<td>" +
       data[i].amount +
