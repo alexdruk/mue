@@ -46,9 +46,16 @@ socket.addEventListener("close", function(event) {
   console.log("Socket closed");
 });
 
+//set tradingView Widget
+window.onload = function() {
+  setTradingViewWidget("MUEBTC");
+};
+
 function sendTicker() {
   let e = document.getElementById("newTicker");
   let ticker = e.options[e.selectedIndex].text;
+  let tickerTView = e.options[e.selectedIndex].value;
+  setTradingViewWidget(tickerTView);
   let data = { exec: "setTicker", data: ticker };
   socket.send(JSON.stringify(data));
 }
@@ -217,4 +224,36 @@ function buildBalance(data) {
       "</tr>";
   }
   return html;
+}
+function setTradingViewWidget(ticker) {
+  let html = "";
+  html +=
+    '<div class="tradingview-widget-container">' +
+    '<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>' +
+    '<script type="text/javascript">' +
+    "new TradingView.widget(" +
+    '{"width": 1100,' +
+    '"height": 610,' +
+    '"symbol": "BITTREX:' +
+    ticker +
+    '",' +
+    '"interval": "1",' +
+    '"timezone": "Etc/UTC",' +
+    '"theme": "Dark",' +
+    '"style": "1",' +
+    '"locale": "en",' +
+    '"toolbar_bg": "rgba(216, 216, 216, 1)",' +
+    '"enable_publishing": false,' +
+    '"withdateranges": true,' +
+    '"allow_symbol_change": true,' +
+    '"details": true' +
+    "});" +
+    "</script>" +
+    "</div>" +
+    '<div id="tradingview_d20fc-wrapper" style="position: relative;box-sizing: content-box;width: 1100px;height: 610px;margin: 0 auto !important;padding: 0 !important;font-family:Arial,sans-serif;"><div style="width: 1100px;height: 610px;background: transparent;padding: 0 !important;"><iframe id="tradingview_d20fc" src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_d20fc&amp;symbol=BITTREX%3A' +
+    ticker +
+    '&amp;interval=1&amp;symboledit=1&amp;saveimage=1&amp;toolbarbg=f1f3f6&amp;details=1&amp;studies=%5B%5D&amp;theme=Dark&amp;style=1&amp;timezone=Etc%2FUTC&amp;withdateranges=1&amp;studies_overrides=%7B%7D&amp;overrides=%7B%7D&amp;enabled_features=%5B%5D&amp;disabled_features=%5B%5D&amp;locale=en&amp;utm_source=localhost&amp;utm_medium=widget&amp;utm_campaign=chart&amp;utm_term=BITTREX%3AMUEBTC" style="width: 100%; height: 100%; margin: 0 !important; padding: 0 !important;" frameborder="0" allowtransparency="true" scrolling="no" allowfullscreen=""></iframe></div></div>';
+  let widget = document.getElementById("tradingview");
+  //  widget.insertAdjacentHTML("beforeend", html);
+  widget.innerHTML = html;
 }
