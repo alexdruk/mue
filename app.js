@@ -30,6 +30,13 @@ wss.on("connection", ws => {
           console.log(e);
         }
         break;
+      case "backtest":
+        try {
+          crypto.backtest(ws, parsedData.data.name, parsedData.data.ticker);
+        } catch (e) {
+          console.log(e);
+        }
+        break;
     }
   });
 

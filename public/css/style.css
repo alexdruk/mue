@@ -72,15 +72,3 @@ label {
   margin: 10px 0 10px 0;
 }
 
-label span {
-  background-color: #89bdd3;
-  color: #323232;
-  border-radius: 4px;
-  padding: 4px 8px 4px 8px;
-}
-
-:checked + span {
-  background-color: #fae596;
-  color: #323232;
-  padding: 4px 8px 4px 8px;
-}

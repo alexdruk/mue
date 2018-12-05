@@ -14,106 +14,108 @@
 <body>
 <div class="container" style="margin: 0px auto;">
     <div id="main">
-        <h1>Mue bot</h1>
+		<h1>Mue bot</h1>
         <div id="logs">
             <p class="col-10 info row" id="info_body">
             </p>
             <p class="col-10 errors row collapse" id="error_body">
             </p>
         </div>
-
-		<div id="tradingview">
-		</div>	
-		<div>
-			<h6>Order Book</h6>
-			<table id="orderbook_table" class="table table-hover table-dark text-center">
-				<thead>
-					<tr>
-						<th scope="col">Total</th>
-						<th scope="col">Size</th>
-						<th scope="col">Bid</th>
-						<th scope="col">|</th>
-						<th scope="col">Ask</th>
-						<th scope="col">Size</th>
-						<th scope="col">Total</th>
-					</tr>
-				</thead>
-				<tbody id="orderbook_body">
-				</tbody>		
-			</table>
-		</div>	
-		<div>
-			<h6>Market History</h6>
-			<table id="mhist" class="table table-hover table-dark text-center">
-				<thead>
-					<tr>
-						<th scope="col">Time</th>
-						<th scope="col">Order type</th>
-						<th scope="col">Buy/Sell</th>
-						<th scope="col">Price</th>
-						<th scope="col">Amount</th>
-						<th scope="col">Cost</th>
-					</tr>
-				</thead>
-				<tbody id="mhist_body">
-				</tbody>		
-			</table>
-		<div>
-			<h6>My open orders</h6>
-			<table id="openOrders" class="table table-hover table-dark text-center">
-				<thead>
-					<tr>
-						<th scope="col">Order date</th>
-						<th scope="col">Order type</th>
-						<th scope="col">Bid/Ask</th><!--price?-->
-						<th scope="col">Filled</th>
-						<th scope="col">Units total</th><!--amount-->
-						<th scope="col">Actual rate</th> <!--cost?-->
-						<th scope="col">Estimated total</th><!--amount*cost - fees-->
-						<th scope="col">Status</th>
-					</tr>
-				</thead>
-				<tbody id="openOrders_body">
-				</tbody>		
-			</table>
-		</div>	
-		<div>
-			<h6>My orders history</h6>
-			<table id="ohist" class="table table-hover table-dark text-center">
-				<thead>
-					<tr>
-						<th scope="col">Closed date</th>
-						<th scope="col">Open date</th>
-						<th scope="col">Type</th>
-						<th scope="col">Bid/Ask</th>
-						<th scope="col">Units filled</th>
-						<th scope="col">Units total</th>
-						<th scope="col">Actual rate</th>
-						<th scope="col">Cost/Proceeds</th>
-					</tr>
-				</thead>
-				<tbody id="ohist_body">
-				</tbody>		
-			</table>
-		</div>				
-		<div>
-			<h6>My balance</h6>
-			<table id="balance" class="table table-hover table-dark text-center">
-				<thead>
-					<tr>
-						<th scope="col">Currency</th>
-						<th scope="col">Balance</th>
-						<th scope="col">Availlable</th>
-						<th scope="col">Pending</th>
-					</tr>
-				</thead>
-				<tbody id="balance_body">
-				</tbody>		
-			</table>
-		</div>				
-	</div>
+		<div id="exchange">
+			<div id="tradingview">
+			</div>	
+			<div>
+				<h6>Order Book</h6>
+				<table id="orderbook_table" class="table table-hover table-dark text-center">
+					<thead>
+						<tr>
+							<th scope="col">Total</th>
+							<th scope="col">Size</th>
+							<th scope="col">Bid</th>
+							<th scope="col">|</th>
+							<th scope="col">Ask</th>
+							<th scope="col">Size</th>
+							<th scope="col">Total</th>
+						</tr>
+					</thead>
+					<tbody id="orderbook_body">
+					</tbody>		
+				</table>
+			</div>	
+			<div>
+				<h6>Market History</h6>
+				<table id="mhist" class="table table-hover table-dark text-center">
+					<thead>
+						<tr>
+							<th scope="col">Time</th>
+							<th scope="col">Order type</th>
+							<th scope="col">Buy/Sell</th>
+							<th scope="col">Price</th>
+							<th scope="col">Amount</th>
+							<th scope="col">Cost</th>
+						</tr>
+					</thead>
+					<tbody id="mhist_body">
+					</tbody>		
+				</table>
+			<div>
+				<h6>My open orders</h6>
+				<table id="openOrders" class="table table-hover table-dark text-center">
+					<thead>
+						<tr>
+							<th scope="col">Order date</th>
+							<th scope="col">Order type</th>
+							<th scope="col">Bid/Ask</th><!--price?-->
+							<th scope="col">Filled</th>
+							<th scope="col">Units total</th><!--amount-->
+							<th scope="col">Actual rate</th> <!--cost?-->
+							<th scope="col">Estimated total</th><!--amount*cost - fees-->
+							<th scope="col">Status</th>
+						</tr>
+					</thead>
+					<tbody id="openOrders_body">
+					</tbody>		
+				</table>
+			</div>	
+			<div>
+				<h6>My orders history</h6>
+				<table id="ohist" class="table table-hover table-dark text-center">
+					<thead>
+						<tr>
+							<th scope="col">Closed date</th>
+							<th scope="col">Open date</th>
+							<th scope="col">Type</th>
+							<th scope="col">Bid/Ask</th>
+							<th scope="col">Units filled</th>
+							<th scope="col">Units total</th>
+							<th scope="col">Actual rate</th>
+							<th scope="col">Cost/Proceeds</th>
+						</tr>
+					</thead>
+					<tbody id="ohist_body">
+					</tbody>		
+				</table>
+			</div>				
+			<div>
+				<h6>My balance</h6>
+				<table id="balance" class="table table-hover table-dark text-center">
+					<thead>
+						<tr>
+							<th scope="col">Currency</th>
+							<th scope="col">Balance</th>
+							<th scope="col">Availlable</th>
+							<th scope="col">Pending</th>
+						</tr>
+					</thead>
+					<tbody id="balance_body">
+					</tbody>		
+				</table>
+			</div>				
+	</div><!--exchange-->
 	<hr>
-	<form class="col-2 offset-5 row">
+	</div> <!--main-->
+	<div name="forms" id="forms>">
+	<form class="col-2 offset-5 row" id="tiker">
 		<div class="form-group">
 		<label for="newTicker" style="color:white">Select another ticker</label>
 		<select class="form-control" id="newTicker" onchange="sendTicker()">
@@ -126,7 +128,10 @@
 		<!--button id="submit" type="submit"    class="btn btn-default col-2 offset-5 row">Start new tickert</button-->
 	</form>
 	<hr>
-	<button id="backtest" onclick="startBacktest" class="btn btn-default col-2 offset-5 row">Start backtest</button>
+	<form name="backtest" id="btest"  class="col-5  offset-5 row text-center" onSubmit="return false;">
+		<button id="backtest" onclick="startBacktest('bbsar')" class="btn btn-default">Start backtest</button>
+	</form>
+	</div>
 </div>
 </body>
 </html>

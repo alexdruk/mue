@@ -58,6 +58,18 @@ function sendTicker() {
   setTradingViewWidget(tickerTView);
   let data = { exec: "setTicker", data: ticker };
   socket.send(JSON.stringify(data));
+  console.log("Message from client: setTicker", ticker);
+}
+
+function startBacktest(btest_name) {
+  let e = document.getElementById("newTicker");
+  let ticker = e.options[e.selectedIndex].text;
+  let dt = { name: btest_name, ticker: ticker };
+  let data = { exec: "backtest", data: dt };
+  socket.send(JSON.stringify(data));
+  document.getElementById("exchange").style.visibility = "hidden";
+  document.getElementById("backtest").disabled = true;
+  console.log("Message from client: backtest", dt);
 }
 
 function buildClosedOrders(data) {

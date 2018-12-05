@@ -28,6 +28,14 @@ let prev_last_ask_vol;
 //-----------------------------------------------------------------------------
 let symbol = "MUE/BTC"; // default
 let cycle;
+let ins = {
+  low: [],
+  high: [],
+  open: [],
+  close: [],
+  volume: [],
+  at: []
+};
 
 //getData();
 //startCycle();
@@ -61,6 +69,38 @@ function sendData(ws, data) {
   } else {
     console.log(message_str);
   }
+}
+async function backtest(ws, backtest_name, symbol) {
+  stopCycle();
+  ins = await exchange_funct.get_ins(exchange, symbol, "1m");
+  console.log("cycle stoped");
+  console.log("Starting backtest:", backtest_name, symbol);
+  sendData(ws, {
+    exec: "info",
+    data:
+      "Starting backtest: " +
+      backtest_name +
+      " " +
+      symbol +
+      " from " +
+      moment(ins.at[0]).format("DD-MM-YYYY HH:mm:ss") +
+      " to " +
+      moment(ins.at[ins.at.length - 1]).format("DD-MM-YYYY HH:mm:ss") +
+      ". Total " +
+      ins.at.length +
+      " intervals"
+  });
+  console.log(
+    "from ",
+    moment(ins.at[0]).format("DD-MM-YYYY HH:mm:ss"),
+    " to ",
+    moment(ins.at[ins.at.length - 1]).format("DD-MM-YYYY HH:mm:ss")
+  );
+  // if (ins) {
+  //     for (const key in ins.at) {
+  //         console.log(key, moment(ins.at[key]).format("DD-MM-YYYY HH:mm"), ins.open[key], ins.high[key], ins.low[key], ins.close[key], ins.volume[key])
+  //     }
+  // }
 }
 async function getData(ws) {
   console.log("Tick " + storage.tick + " - " + symbol + " - " + new Date());
@@ -135,20 +175,6 @@ async function getData(ws) {
     //    console.log("Initial balance:", storage.inibalance_as_string);
   }
 
-  let ins = {
-    low: [],
-    high: [],
-    open: [],
-    close: [],
-    volume: [],
-    at: []
-  };
-  ins = await exchange_funct.get_ins(exchange, symbol, "1m");
-  // if (ins) {
-  //     for (const key in ins.at) {
-  //         console.log(key, moment(ins.at[key]).format("DD-MM-YYYY HH:mm"), ins.open[key], ins.high[key], ins.low[key], ins.close[key], ins.volume[key])
-  //     }
-  // }
   let orderbook = await exchange_funct.get_orderBook(exchange, symbol, 20);
   sendData(ws, {
     exec: "orderbook",
@@ -245,6 +271,7 @@ async function getData(ws) {
 //getData();
 module.exports = {
   setTicker: setTicker,
+  backtest: backtest,
   startCycle: startCycle,
   stopCycle: stopCycle,
   sendData: sendData
