@@ -83,18 +83,18 @@ async function backtest(ws, backtest_name, symbol) {
       " " +
       symbol +
       " from " +
-      moment(ins.at[0]).format("DD-MM-YYYY HH:mm:ss") +
+      moment(ins.at[0]).format("DD/MM/YYYY HH:mm:ss") +
       " to " +
-      moment(ins.at[ins.at.length - 1]).format("DD-MM-YYYY HH:mm:ss") +
+      moment(ins.at[ins.at.length - 1]).format("DD/MM/YYYY HH:mm:ss") +
       ". Total " +
       ins.at.length +
       " intervals"
   });
   console.log(
     "from ",
-    moment(ins.at[0]).format("DD-MM-YYYY HH:mm:ss"),
+    moment(ins.at[0]).format("DD/MM/YYYY HH:mm:ss"),
     " to ",
-    moment(ins.at[ins.at.length - 1]).format("DD-MM-YYYY HH:mm:ss")
+    moment(ins.at[ins.at.length - 1]).format("DD/MM/YYYY HH:mm:ss")
   );
   // if (ins) {
   //     for (const key in ins.at) {
