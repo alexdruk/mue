@@ -1,7 +1,6 @@
+"use strict";
 const ccxt = require("ccxt");
 const moment = require("moment");
-
-const records = 200;
 module.exports = {
   get_ins: async function(exchange, symbol, interval, records) {
     try {
@@ -109,7 +108,10 @@ module.exports = {
       .subtract(1, "days")
       .valueOf();
     try {
-      orders_arr = await exchange.fetchOpenOrders(symbol, timestamp_aday_ago);
+      let orders_arr = await exchange.fetchOpenOrders(
+        symbol,
+        timestamp_aday_ago
+      );
       for (let i = 0; i < orders_arr.length; i++) {
         let order = {
           id: "",

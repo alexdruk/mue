@@ -3,6 +3,8 @@
 const ccxt = require("ccxt");
 const creds = require("./api_keys.js");
 const exchange_funct = require("./exchange_funct.js");
+const talib = require("./talib.js");
+const backtest_trading = require("./backtest.js");
 const WebSocket = require("ws");
 const moment = require("moment");
 const exchangeId = "bittrex";
@@ -96,12 +98,92 @@ async function backtest(ws, backtest_name, symbol) {
     " to ",
     moment(ins.at[ins.at.length - 1]).format("DD/MM/YYYY HH:mm:ss")
   );
-  // if (ins) {
-  //     for (const key in ins.at) {
-  //         console.log(key, moment(ins.at[key]).format("DD-MM-YYYY HH:mm"), ins.open[key], ins.high[key], ins.low[key], ins.close[key], ins.volume[key])
-  //     }
-  // }
-}
+  // loop with 300 runs 3,5 min
+  const trades = 5;
+  let bb_sar_res = "";
+  const fee = 0.5; //double bittrex fees
+  const bb_sar_dataRange = {};
+  const Accelerations = [0.005, 0.0025, 0.00125];
+  const bb_periods = [8, 10, 12, 14, 16, 18, 20, 22];
+  const num_stds = [1.0, 1.5, 2.0];
+  const std_periods = [5, 6, 7, 8, 9];
+  for (const accel of Accelerations) {
+    for (const bbperiod of bb_periods) {
+      for (const n_stds of num_stds) {
+        for (const std_period of std_periods) {
+          backtest_trading.storageIni(storage);
+          for (let i = 30; i < ins.at.length - 300; i++) {
+            let high = ins.high.slice(i, i + 300);
+            let low = ins.low.slice(i, i + 300);
+            let close = ins.close.slice(i, i + 300);
+            let std = await talib.std(close, 1, std_period);
+            let bbResults = await talib.bb(
+              close,
+              1,
+              bbperiod,
+              n_stds,
+              n_stds,
+              0
+            );
+            let sarResults = await talib.sar(high, low, 1, accel, accel * 10);
+            let bbUpperBand = bbResults.outRealUpperBand;
+            let bbLowerBand = bbResults.outRealLowerBand;
+            backtest_trading.bbsar(
+              close.pop(),
+              bbUpperBand.pop(),
+              bbLowerBand.pop(),
+              std.pop(),
+              sarResults.pop(),
+              storage,
+              fee
+            );
+            //                    console.log('sar=', sarResults.pop())
+          }
+          let bb_sar_params =
+            bbperiod + "#" + n_stds + "#" + std_period + "#" + accel;
+          if (storage.pl > 0 && storage.sells > trades) {
+            bb_sar_dataRange[bb_sar_params] = storage.pl;
+            // console.log(bb_sar_params, storage.pl, new Date());
+          }
+        } //std_period
+      } ////nstd
+    } //bbperiod
+  } //for accel
+  if (Object.keys(bb_sar_dataRange).length > 0) {
+    bb_sar_res = Object.keys(bb_sar_dataRange).reduce((a, b) =>
+      bb_sar_dataRange[a] > bb_sar_dataRange[b] ? a : b
+    );
+    console.log(
+      "Optimum for " + backtest_name + ":",
+      bb_sar_res,
+      "#",
+      bb_sar_dataRange[bb_sar_res]
+    );
+  } else {
+    console.log("Less than 3 trades with current bb_sar_res range");
+  }
+  if (bb_sar_res) {
+    let [bb_period, n_stds, std_period, accel] = bb_sar_res.split("#");
+    sendData(ws, {
+      exec: "info",
+      data:
+        "Backtest finished. Optimal parameters are: bb period " +
+        bb_period +
+        ", n_stds " +
+        n_stds +
+        ", std_period " +
+        std_period +
+        ", acceleration " +
+        accel
+    });
+  } else {
+    sendData(ws, {
+      exec: "info",
+      data: "Finished: not enough data for backtest."
+    });
+  }
+  //   startCycle(ws);
+} //backtest
 async function getData(ws) {
   console.log("Tick " + storage.tick + " - " + symbol + " - " + new Date());
   sendData(ws, {

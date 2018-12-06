@@ -67,8 +67,8 @@ function startBacktest(btest_name) {
   let dt = { name: btest_name, ticker: ticker };
   let data = { exec: "backtest", data: dt };
   socket.send(JSON.stringify(data));
-  document.getElementById("exchange").style.visibility = "hidden";
-  document.getElementById("backtest").disabled = true;
+  //  document.getElementById("exchange").style.visibility = "hidden";
+  //   document.getElementById("backtest").disabled = true;
   console.log("Message from client: backtest", dt);
 }
 
