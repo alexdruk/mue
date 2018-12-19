@@ -72,6 +72,7 @@ function sendData(ws, data) {
     console.log(message_str);
   }
 }
+//////////////////////////////////////////////////////
 async function backtest(ws, backtest_name, symbol) {
   stopCycle();
   ins = await exchange_funct.get_ins(exchange, symbol, "1m");
@@ -90,7 +91,7 @@ async function backtest(ws, backtest_name, symbol) {
       moment(ins.at[ins.at.length - 1]).format("DD/MM/YYYY HH:mm:ss") +
       ". Total " +
       ins.at.length +
-      " intervals"
+      " intervals. Be patient..."
   });
   console.log(
     "from ",
@@ -182,8 +183,10 @@ async function backtest(ws, backtest_name, symbol) {
       data: "Finished: not enough data for backtest."
     });
   }
-  //   startCycle(ws);
+  await exchange_funct.sleep(30000); //sleep for 30 sec before continue
+  startCycle(ws);
 } //backtest
+//////////////////////////////////////////////////////
 async function getData(ws) {
   console.log("Tick " + storage.tick + " - " + symbol + " - " + new Date());
   sendData(ws, {
@@ -257,7 +260,7 @@ async function getData(ws) {
     //    console.log("Initial balance:", storage.inibalance_as_string);
   }
 
-  let orderbook = await exchange_funct.get_orderBook(exchange, symbol, 20);
+  let orderbook = await exchange_funct.get_orderBook(exchange, symbol, 10);
   sendData(ws, {
     exec: "orderbook",
     data: orderbook
@@ -281,6 +284,7 @@ async function getData(ws) {
     exec: "closedOrders",
     data: closedOrders
   });
+
   /*
   let msg;
   let lastorderbook = await exchange_funct.get_orderBook(exchange, symbol, 1);
