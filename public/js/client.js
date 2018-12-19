@@ -61,9 +61,11 @@ function sendTicker() {
   console.log("Message from client: setTicker", ticker);
 }
 
-function startBacktest(btest_name) {
+function startBacktest() {
   let e = document.getElementById("newTicker");
   let ticker = e.options[e.selectedIndex].text;
+  let el = document.getElementById("btest_name");
+  let btest_name = el.options[e.selectedIndex].value;
   let dt = { name: btest_name, ticker: ticker };
   let data = { exec: "backtest", data: dt };
   socket.send(JSON.stringify(data));

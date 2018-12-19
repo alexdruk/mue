@@ -125,7 +125,8 @@
                      <label for="newTicker" style="color:white">Select another ticker</label>
                      <select class="form-control" id="newTicker" onchange="sendTicker()">
                         <option value='MUEBTC'  selected>MUE/BTC</option>
-                        <option value='ABYBTC'>ABY/BTC</option>
+                        <option value='CRWBTC'>CRW/BTC</option>
+                         <option value='ABYBTC'>ABY/BTC</option>
                         <option value='ADTBTC'>ADT/BTC</option>
                         <option value='ADABTC'>ADA/BTC</option>
                      </select>
@@ -133,8 +134,19 @@
                   <!--button id="submit" type="submit"    class="btn btn-default col-2 offset-5 row">Start new tickert</button-->
                </form>
                <hr>
-               <form name="backtest" id="btest"  class="col-5  offset-5 row text-center" onSubmit="return false;">
-                  <button id="backtest" onclick="startBacktest('bbsar')" class="btn btn-default">Start backtest</button>
+               <form name="backtest" id="btest" class="col-9 offset-4 row" onSubmit="return false;">
+                  <div class="form-row">
+                     <label for="btest_name" style="color:white">Backtest&nbsp;</label> 
+                     <div class="form-group col-4">
+                     <select class="form-control" id="btest_name" required>
+                        <option value='bbsar'  selected>bb-sar</option>
+                     </select>
+                     </div>
+                     <div class="form-group col-4">
+                     <button id="backtest" onclick="startBacktest()" class="btn btn-default">Start backtest</button>
+                     </div>
+                  </div>
+               </form>
                </form>
             </div>
          </div>
