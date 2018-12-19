@@ -219,5 +219,9 @@ module.exports = {
       //            this.sendError('Fatal error: ' + e.message);
       throw e;
     }
+  },
+
+  sleep: function(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 };
