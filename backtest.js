@@ -21,6 +21,8 @@ module.exports = {
     storage.sells = 0;
     storage.up = 0; // for consequent indicarors, like RSI
     storage.down = 0;
+    storage.orders = [];
+    storage.last_buy_order_id = "";
   },
   bbsar: function(close, bbUpperBand, bbLowerBand, std, sar, storage, fee) {
     let price = close;
