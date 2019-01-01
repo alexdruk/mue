@@ -1,7 +1,58 @@
 "use strict";
 const ccxt = require("ccxt");
 const moment = require("moment");
+
 module.exports = {
+  get_order_info: async function(exchange, orderID) {
+    try {
+      const response = await exchange.fetchOrder(orderID);
+      //      console.log(response);
+      console.log("Succeeded");
+      for (const key in response) {
+        console.log(key, response[key]);
+      }
+      return response;
+    } catch (e) {
+      console.log(exchange.iso8601(Date.now()), e.constructor.name, e.message);
+      // let msg = e.constructor.name + " " + e.message;
+      // this.sendError(msg);
+      console.log("Failed");
+      return null;
+    }
+  },
+  create_order: async function(
+    exchange,
+    symbol,
+    orderType,
+    side,
+    amount,
+    price
+  ) {
+    try {
+      const response = await exchange.createOrder(
+        symbol,
+        orderType,
+        side,
+        amount,
+        price
+      );
+      //      console.log(response);
+      console.log("Succeeded");
+      for (const k in response.info.result) {
+        console.log(k, response.info.result[k]);
+      }
+      for (const key in response) {
+        console.log(key, response[key]);
+      }
+      return response;
+    } catch (e) {
+      console.log(exchange.iso8601(Date.now()), e.constructor.name, e.message);
+      // let msg = e.constructor.name + " " + e.message;
+      // this.sendError(msg);
+      console.log("Failed");
+      return null;
+    }
+  },
   get_ins: async function(exchange, symbol, interval, records) {
     try {
       //let low, high, open, close, vol, at = [];
@@ -23,6 +74,28 @@ module.exports = {
       return ins;
     } catch (e) {
       this.parseError(e);
+    }
+  },
+
+  get_account_info: async function(exchange, symbol) {
+    let curr_available = 0;
+    let assets_available = 0;
+    let [assets_name, currency_name] = symbol.split("/");
+    let balanceinfo = await this.get_balance(exchange);
+    for (const key in balanceinfo) {
+      if (balanceinfo.hasOwnProperty(key)) {
+        const element = balanceinfo[key];
+        if (element.Currency === currency_name) {
+          curr_available = element.Available;
+        } else if (element.Currency === assets_name) {
+          assets_available += element.Available;
+        }
+      }
+    }
+    if (curr_available || assets_available) {
+      return [curr_available, assets_available];
+    } else {
+      return [null, null];
     }
   },
 

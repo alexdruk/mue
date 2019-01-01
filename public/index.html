@@ -120,7 +120,7 @@
             </div>
             <!--main-->
             <div  id="forms>">
-               <form class="col-2 offset-5 row" id="tiker">
+               <form class="col-2 offset-5 row" id="ticker">
                   <div class="form-group">
                      <label for="newTicker" style="color:white">Select another ticker</label>
                      <select class="form-control" id="newTicker" onchange="sendTicker()">
@@ -147,6 +147,20 @@
                      </div>
                   </div>
                </form>
+               <hr>
+               <form name="trade" id="trade" class="col-9 offset-4 row" onSubmit="return false;">
+                  <div class="form-row">
+                     <label for="strategy" style="color:white">Strategy&nbsp;</label> 
+                     <div class="form-group col-4">
+                     <select class="form-control" id="strategy" required>
+                        <option value='bbsar'  selected>bb-sar</option>
+                        <option value='mm'>mm</option>
+                     </select>
+                     </div>
+                     <div class="form-group col-4">
+                     <button id="starttrading" onclick="startTrading()" class="btn btn-default">Start trading</button>
+                     </div>
+                  </div>
                </form>
             </div>
          </div>

@@ -5,6 +5,7 @@ const creds = require("./api_keys.js");
 const exchange_funct = require("./exchange_funct.js");
 const talib = require("./talib.js");
 const backtest_trading = require("./backtest.js");
+const trading = require("./trading.js");
 const WebSocket = require("ws");
 const moment = require("moment");
 const exchangeId = "bittrex";
@@ -38,9 +39,13 @@ let ins = {
   volume: [],
   at: []
 };
+let curr_available = 0;
+let assets_available = 0;
+let bittrex_min_trade_amount = 0.005; //in BTC
 
 //getData();
 //startCycle();
+trade(WebSocket, "bbsar", "MUE/BTC");
 
 function setTicker(ws, ticker) {
   console.log("new ticker", ticker);
@@ -71,6 +76,114 @@ function sendData(ws, data) {
   } else {
     console.log(message_str);
   }
+}
+//////////////////////////////////////////////////////
+async function trade(ws, strategy, ticker) {
+  backtest_trading.storageIni(storage);
+  const symbol = ticker;
+  let bbsar_config = null;
+  if (strategy == "bbsar") {
+    bbsar_config = require("./bbsar_config.js");
+    let price = await exchange_funct.get_last_price(exchange, symbol);
+    [curr_available, assets_available] = await exchange_funct.get_account_info(
+      exchange,
+      symbol
+    );
+    // console.log(
+    //   "curr_available",
+    //   curr_available,
+    //   "assets_available",
+    //   assets_available
+    // );
+    // trading.strategy(ticker);
+    ins = await exchange_funct.get_ins(exchange, symbol, "1m");
+    let Accelerations = bbsar_config.Accelerations;
+    let bb_periods = bbsar_config.bb_periods;
+    let num_stds = bbsar_config.num_stds;
+    let std_periods = bbsar_config.std_periods;
+    let bbResults = await talib.bb(
+      ins.close,
+      1,
+      bb_periods,
+      num_stds,
+      num_stds,
+      0
+    );
+    let bbUpperBand = bbResults.outRealUpperBand.pop();
+    let bbLowerBand = bbResults.outRealLowerBand.pop();
+    let sarResults = await talib.sar(
+      ins.high,
+      ins.low,
+      1,
+      Accelerations,
+      Accelerations * 10
+    );
+    let sar = sarResults.pop();
+    let stdResults = await talib.std(ins.close, 1, std_periods);
+    let std = stdResults.pop();
+    //got indicators, start trading
+    let do_trade = true;
+    let stoploss = false;
+    if (sar > price) {
+      do_trade = false;
+    }
+    if (storage.last_buy && sar <= price) {
+      stoploss = true;
+    }
+    // if (storage.last_buy_order_id) {
+    //   let order = await exchange_funct.get_order_info(
+    //     exchange,
+    //     storage.last_buy_order_id
+    //   );
+    // }
+    //buy
+    let amount = 0;
+    if (price < bbLowerBand - std && curr_available && do_trade) {
+      amount = curr_available / 2;
+      console.log("buy condition... Amount:", amount);
+      //to make market order made price much more then current price
+      if (amount * price > bittrex_min_trade_amount) {
+        let buyOrder = await exchange_funct.create_order(
+          exchange,
+          symbol,
+          "limit",
+          "buy",
+          amount,
+          price / 2 // CHANGE TO OPPOSITE!!!! to make market order
+        );
+        storage.last_buy_order_id = buyOrder.id;
+        storage.orders.push(buyOrder);
+        storage.last_buy = price;
+        storage.last_sell = 0;
+        storage.buys++;
+      }
+    } //buy
+    //sell
+    if (
+      (price > bbUpperBand + std &&
+        storage.last_buy &&
+        price > storage.last_buy &&
+        do_trade) ||
+      stoploss
+    ) {
+      amount = assets_available / 2;
+      if (amount * price > bittrex_min_trade_amount) {
+        let sellOrder = await exchange_funct.create_order(
+          exchange,
+          symbol,
+          "limit",
+          "sell",
+          amount,
+          price * 2 // CHANGE TO OPPOSITE!!!! to make market order
+        );
+        storage.last_buy_order_id = sellOrder.id;
+        storage.orders.push(sellOrder);
+        storage.last_sell = price;
+        storage.sells++;
+        storage.last_buy = 0;
+      }
+    } //sell
+  } //strategy
 }
 //////////////////////////////////////////////////////
 async function backtest(ws, backtest_name, symbol) {
@@ -107,7 +220,7 @@ async function backtest(ws, backtest_name, symbol) {
   const Accelerations = [0.005, 0.0025, 0.00125];
   const bb_periods = [8, 10, 12, 14, 16, 18, 20, 22];
   const num_stds = [1.0, 1.5, 2.0];
-  const std_periods = [5, 6, 7, 8, 9];
+  const std_periods = [4, 6, 8, 10, 12, 14, 16, 18];
   for (const accel of Accelerations) {
     for (const bbperiod of bb_periods) {
       for (const n_stds of num_stds) {
@@ -229,22 +342,22 @@ async function getData(ws) {
       exec: "balance",
       data: balanceinfo
     });
-    let curr_availabe,
+    let curr_available,
       assets_available = 0;
     for (const key in balanceinfo) {
       if (balanceinfo.hasOwnProperty(key)) {
         const element = balanceinfo[key];
         if (element.Currency === currency_name) {
-          curr_availabe = element.Available;
+          curr_available = element.Available;
         } else if (element.Currency === assets_name) {
           assets_available += element.Available;
         }
       }
     }
-    let assets_in_carrency = assets_available * last_price;
-    storage.inibalance = assets_in_carrency;
+    let assets_in_currency = assets_available * last_price;
+    storage.inibalance = assets_in_currency;
     let balance =
-      curr_availabe +
+      curr_available +
       "(" +
       currency_name +
       ") + " +
@@ -252,14 +365,13 @@ async function getData(ws) {
       "(" +
       assets_name +
       ") = " +
-      assets_in_carrency +
+      assets_in_currency +
       "(" +
       currency_name +
       ")";
     storage.inibalance_as_string = balance;
-    //    console.log("Initial balance:", storage.inibalance_as_string);
+    // console.log("Initial balance:", storage.inibalance_as_string);
   }
-
   let orderbook = await exchange_funct.get_orderBook(exchange, symbol, 10);
   sendData(ws, {
     exec: "orderbook",
@@ -356,6 +468,7 @@ async function getData(ws) {
 }
 //getData();
 module.exports = {
+  trade: trade,
   setTicker: setTicker,
   backtest: backtest,
   startCycle: startCycle,

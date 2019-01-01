@@ -10,7 +10,7 @@
             "name": "Launch Program",
             // "program": "${workspaceFolder}/index.js",
             // "args": [ "MUE/BTC"]
-            "program": "${workspaceFolder}/test.js",
+            "program": "${workspaceFolder}/index.js",
         }
     ]
 }

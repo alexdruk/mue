@@ -61,6 +61,17 @@ function sendTicker() {
   console.log("Message from client: setTicker", ticker);
 }
 
+function startTrading() {
+  let e = document.getElementById("newTicker");
+  let ticker = e.options[e.selectedIndex].text;
+  let el = document.getElementById("strategy");
+  let strategy = el.options[e.selectedIndex].value;
+  let dt = { name: strategy, ticker: ticker };
+  let data = { exec: "trade", data: dt };
+  socket.send(JSON.stringify(data));
+  console.log("Message from client: trade", dt);
+}
+
 function startBacktest() {
   let e = document.getElementById("newTicker");
   let ticker = e.options[e.selectedIndex].text;
