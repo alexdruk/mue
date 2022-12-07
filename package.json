@@ -9,8 +9,8 @@
   "author": "Cryptelligent",
   "license": "ISC",
   "dependencies": {
-    "ccxt": "^1.17.511",
-    "express": "^4.16.4",
+    "ccxt": "^1.95.43",
+    "express": "^4.18.2",
     "moment": "^2.22.2",
     "opn": "^5.4.0",
     "path": "^0.12.7",
